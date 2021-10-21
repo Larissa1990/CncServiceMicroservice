@@ -10,7 +10,7 @@ namespace CncService.Domain.CncServiceAggregate
     {
         Task<CNCService> BuildServiceByIdAsnyc(string id);
         Task<List<CNCService>> BuildServicesAsync();
-
+        Task<List<CNCService>> BuildServicesByGranularityAsync(int granularity);
         Task<List<CNCService>> BuildBySubAsync(string subid);
     }
 }

@@ -37,6 +37,16 @@ namespace CncService.Infrastructure
             return services;
         }
 
+        public async Task<List<CNCService>>BuildServicesByGranularityAsync(int granularity)
+        {
+            List<CNCService> services = await _context.services
+                .Include(s => s.endpoints)
+                .ThenInclude(e => e.binding)
+                .Include(s => s.endpoints)
+                .ThenInclude(e => e.contract).ToListAsync();
+            return services;
+        }
+
         public async Task<List<CNCService>> BuildBySubAsync(string subid)
         {
             List<Subscribe> subs = await _context.subscribers.Where(x => x.subid == subid).ToListAsync();

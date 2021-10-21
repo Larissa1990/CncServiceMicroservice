@@ -52,6 +52,8 @@ namespace CncService.Api.Application
     {
         public static CNCservice ToExternal(CNCService service)
         {
+            if (service==null)
+                return null;
             CNCservice _service = new CNCservice()
             {
                 id=service.id,

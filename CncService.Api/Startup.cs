@@ -26,23 +26,26 @@ namespace CncService.Api
         }
 
         public IConfiguration Configuration { get; }
+        public ILifetimeScope AutofacContainer { get; private set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public virtual IServiceProvider ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers().AddApplicationPart(typeof(CNCserviceController).Assembly);
-            services.AddRazorPages();
+            //services.AddOptions();
+            //services.AddRazorPages();
+        }
 
-            var container = new ContainerBuilder();
-            container.Populate(services);
-            container.RegisterModule(new MediatorModules());
-            container.RegisterModule(new ApplicationModules());
-            return new AutofacServiceProvider(container.Build());
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            builder.RegisterModule(new MediatorModules());
+            builder.RegisterModule(new ApplicationModules());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            this.AutofacContainer = app.ApplicationServices.GetAutofacRoot();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -56,8 +59,8 @@ namespace CncService.Api
 
             app.UseEndpoints(endpoints =>
             {
-                //endpoints.MapControllers();
-                endpoints.MapRazorPages();
+                endpoints.MapControllers();
+                //endpoints.MapRazorPages();
             });
         }
     }

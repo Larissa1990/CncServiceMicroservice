@@ -34,7 +34,8 @@ namespace CncService.Api.Application.Queries
         }
         public async Task<List<CNCservice>> GetByGranularityAsync(int granularity)
         {
-            throw new NotImplementedException();
+            var services = await factory.BuildServicesByGranularityAsync(granularity);
+            return DTO.ToExternals(services);
         }
         public async Task<List<CNCservice>> GetBySubscriberAsync(string subid)
         {
